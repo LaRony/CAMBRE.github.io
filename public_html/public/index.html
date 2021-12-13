@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Control</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/5.5.2/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/5.5.2/firebase-auth.js"></script>
+    <script defer src="/__/firebase/5.5.2/firebase-database.js"></script>
+    <script defer src="/__/firebase/5.5.2/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/5.5.2/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script defer src="/__/firebase/init.js"></script>
+    <meta charset="utf-8">    
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAbUsRIuT0D6tIu7juLrwlfrLJwe-yzfN8",
+    authDomain: "apptemphume.firebaseapp.com",
+    databaseURL: "https://apptemphume.firebaseio.com",
+    projectId: "apptemphume",
+    storageBucket: "apptemphume.appspot.com",
+    messagingSenderId: "885218195742"
+  };
+  firebase.initializeApp(config);
+</script>
+  </head>
+  <body>
+<br>
+<br>
+<br>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-success">
+          <div class="panel-heading">Supervision temperatura y humedad</div>
+          <div class="panel-body">
+             <div class="checkbox">
+              <center>
+              <div class="panel-heading" style="font-size: large " id="temp" > </div>
+              <div class="panel-heading" style="font-size: large " id="hume" > </div>
+             <!-- <button type="button" class="btn btn-primary" onclick="encender()" >ON Led 1</button>
+              <button type="button" class="btn btn-primary" onclick="apagar()" >OFF Led 1</button> -->   
+              <br>
+              <div class="panel-heading" style="font-size: medium " >Control Ventilador </div>
+              <div class="onoffswitch">
+              <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="checkLedA" checked>
+              <label class="onoffswitch-label" for="checkLedA">
+              <span class="onoffswitch-inner"></span>
+              <span class="onoffswitch-switch"></span>
+              </label>
+              </div>
+              </center>                               
+            </div>
+          </div>
+           
+          </div>
+          
+      </div>
+    </div>
+  </div>
+  <script>
+var db = firebase.database().ref('apptemphume');
+// último estado
+db.on('value', function(data){
+   console.log("data: ", data.val());
+   $("#checkLedA").prop('checked', data.val().led1); 
+   document.getElementById('temp').innerHTML= "Temperatura: " + data.val().temp + "°c";
+   document.getElementById('hume').innerHTML= "Humedad: " + data.val().hume + " Unidades";
+});
+$("#checkLedA").click(function(){
+  var estado = $(this).is(':checked');
+  db.update({
+    led1:estado
+  });
+});
+  </script>   
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+          let app = firebase.app();
+          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
+          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+    </script>
+  </body>
+</html>

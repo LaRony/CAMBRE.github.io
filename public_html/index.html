@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Firebase Led</title>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyC6IyqCCSrx9_hm_To1VjDEstQe8pELkvY",
+        authDomain: "cambre-29c42.firebaseapp.com",
+        databaseURL: "https://cambre-29c42-default-rtdb.firebaseio.com",
+        projectId: "cambre-29c42",
+        storageBucket: "cambre-29c42.appspot.com",
+        messagingSenderId: "404290148742",
+        appId: "1:404290148742:web:9e5ff8c5f6469f9a5a7407",
+      };
+      firebase.initializeApp(config);
+    </script>
+  </head>
+  <body>
+    <center>
+      <a
+        ><img
+          src="Vivero.png"
+          width="500"
+          height="160"
+          style="border: 2.5px solid; color: black"
+      /></a>
+    </center>
+    <br />
+    <br />
+    <br />
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="panel panel-success">
+            <div class="panel-heading">
+              Supervisión de temperatura, humedad relativa y humedad del suelo
+            </div>
+            <div class="panel-body">
+              <div class="checkbox">
+                <center>
+                  <div
+                    class="panel-heading"
+                    style="font-size: large"
+                    id="Tempe"
+                  ></div>
+                  <div
+                    class="panel-heading"
+                    style="font-size: large"
+                    id="Hume"
+                  ></div>
+                  <div
+                    class="panel-heading"
+                    style="font-size: large"
+                    id="HumeSuelo"
+                  ></div>
+                  <!-- <button type="button" class="btn btn-primary" onclick="encender()" >ON Led 1</button>
+              <button type="button" class="btn btn-primary" onclick="apagar()" >OFF Led 1</button> -->
+                  <br />
+                  <div class="panel-heading" style="font-size: medium">
+                    Control Bomba de agua
+                  </div>
+                  <div class="onoffswitch">
+                    <input
+                      type="checkbox"
+                      name="onoffswitch"
+                      class="onoffswitch-checkbox"
+                      id="checkLedA"
+                      checked
+                    />
+                    <label class="onoffswitch-label" for="checkLedA">
+                      <span class="onoffswitch-inner"></span>
+                      <span class="onoffswitch-switch"></span>
+                    </label>
+                  </div>
+                </center>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <center>
+      <a href="../index.html" class="btn btn-primary btn-lg active" role="button"><img src="volver.png" width="180" height="60" /></a>
+    </center>
+    
+    <script>
+      var db = firebase.database().ref("DHT");
+      // último estado
+      db.on("value", function (data) {
+        console.log("data: ", data.val());
+        //$("#checkLedA").prop('checked', data.val().bomba);
+        document.getElementById("Tempe").innerHTML =
+          "Temperatura: " + data.val().temp + "°c";
+        document.getElementById("Hume").innerHTML =
+          "Humedad: " + data.val().hum + " %";
+        document.getElementById("HumeSuelo").innerHTML =
+          "Humedad Suelo: " + data.val().humTierra + " %";
+      });
+      var dbb = firebase.database().ref("home");
+      // último estado
+      dbb.on("value", function (data) {
+        console.log("data: ", data.val());
+        $("#checkLedA").prop("checked", data.val().bomba);
+      });
+      $("#checkLedA").click(function () {
+        var estado = $(this).is(":checked");
+        dbb.update({
+          bomba: estado,
+        });
+      });
+    </script>
+  </body>
+</html>
